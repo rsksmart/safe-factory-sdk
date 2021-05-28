@@ -24,3 +24,39 @@
 ```
 npm i @rsksmart/safe-factory-sdk
 ```
+
+
+## Run for development
+
+Install dependencies:
+
+```
+npm i
+```
+
+### Run a local network
+
+```
+npx hardhat node
+```
+
+### Tests
+
+Run unit tests with
+
+```
+npx hardhat test
+```
+
+### Lint & formatting
+
+```
+npm run format
+npm run lint
+```
+
+### Build
+
+```
+npm run build
+```
