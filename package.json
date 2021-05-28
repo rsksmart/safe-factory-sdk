@@ -8,8 +8,8 @@
     "test:coverage": "nyc hardhat test",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier \"{src,tests,hardhat}/**/*.ts\" --write",
-    "build": "rm -rf lib && npx webpack",
-    "build:tsc": "rm -rf lib && tsc --project tsconfig.build.json",
+    "build": "rimraf lib && npx webpack",
+    "build:tsc": "rimraf lib && tsc --project tsconfig.build.json",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -60,6 +60,7 @@
     "lint-staged": "^11.0.0",
     "nyc": "^15.1.0",
     "prettier": "^2.3.0",
+    "rimraf": "^2.7.1",
     "stream-browserify": "^3.0.0",
     "ts-loader": "^9.2.2",
     "ts-node": "^10.0.0",
