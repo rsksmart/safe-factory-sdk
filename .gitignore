@@ -5,3 +5,6 @@ node_modules
 cache
 artifacts
 deployments
+
+# nyc
+.nyc_output
