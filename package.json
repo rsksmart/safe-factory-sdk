@@ -1,8 +1,11 @@
 {
-  "name": "safe-factory-sdk",
+  "name": "@rsksmart/safe-factory-sdk",
   "version": "1.0.0",
   "description": "RIF Safe Factory SDK",
   "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "npx hardhat test",
     "test:coverage": "nyc hardhat test",
