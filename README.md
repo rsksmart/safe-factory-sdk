@@ -24,3 +24,68 @@
 ```
 npm i @rsksmart/safe-factory-sdk
 ```
+
+## Create a Safe account
+
+It requires that both the [GnosisSafeProxyFactory](https://github.com/gnosis/safe-contracts/blob/v1.2.0/contracts/proxies/GnosisSafeProxyFactory.sol) and the [GnosisSafe](https://github.com/gnosis/safe-contracts/blob/v1.2.0/contracts/GnosisSafe.sol) have been deployed.
+
+```js
+import { EthersSafeFactory } from '@rsksmart/safe-factory-sdk'
+
+const proxyFactoryAddress = '0x<GnosisSafeProxyFactory address here>'
+const safeSingletonAddress = '0x<GnosisSafe address here>'
+
+const ethersSafeFactory = new EthersSafeFactory(
+  signer,
+  proxyFactoryAddress,
+  safeSingletonAddress
+)
+
+const safeSdk = await ethersSafeFactory.createSafe({
+  owners: ['0x1234...', '0xabcd...', '0x0987...'],
+  threshold: 2
+})
+```
+
+For the SafeSDK usage, please have a look at the [official documentation](https://docs.gnosis.io/safe/docs/sdks_core/).
+
+## Run for development
+
+Install dependencies:
+
+```
+npm i
+```
+
+### Run a local network
+
+```
+npx hardhat node
+```
+
+### Tests
+
+Run unit tests with
+
+```
+npx hardhat test
+```
+
+With Coverage:
+```
+npm run test:coverage
+```
+
+### Lint & formatting
+
+```
+npm run format
+npm run lint
+```
+
+### Build
+
+```
+npm run build
+```
+
