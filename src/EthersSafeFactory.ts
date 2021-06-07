@@ -33,7 +33,7 @@ class EthersSafeFactory {
   #signer!: Signer
   #proxyFactoryAddress!: string
   #safeSingletonAddress!: string
-  validateIsDeployed: (address: string, name: string) => Promise<void>
+  validateContractsAreDeployed: () => Promise<void>
 
   constructor(signer: Signer, proxyFactoryAddress: string, safeSingletonAddress: string) {
     this.#signer = signer
@@ -45,7 +45,11 @@ class EthersSafeFactory {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.validateIsDeployed = validateIsDeployedFactory(this.#signer.provider!)
+    const validateIsDeployed = validateIsDeployedFactory(this.#signer.provider!)
+    this.validateContractsAreDeployed = async () => {
+      await validateIsDeployed(this.#proxyFactoryAddress, 'ProxyFactory')
+      await validateIsDeployed(this.#safeSingletonAddress, 'SafeSingleton')
+    }
   }
 
   async createSafe(
@@ -60,8 +64,6 @@ class EthersSafeFactory {
      * 4) deploy proxy
      * 5) recover address
      */
-    await this.validateIsDeployed(this.#proxyFactoryAddress, 'ProxyFactory')
-    await this.validateIsDeployed(this.#safeSingletonAddress, 'SafeSingleton')
 
     const {
       owners,
@@ -75,6 +77,7 @@ class EthersSafeFactory {
     } = safeAccountConfiguration
 
     validateSafeCreationParams(owners, threshold)
+    await this.validateContractsAreDeployed()
 
     const gnosisSafeInterface = createGnosisSageInterface()
     const setupFunctionData = gnosisSafeInterface.encodeFunctionData('setup', [
