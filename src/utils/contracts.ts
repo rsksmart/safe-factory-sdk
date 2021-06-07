@@ -1,13 +1,17 @@
 import { providers, Signer, Contract } from 'ethers'
 import { EMPTY_DATA } from './constants'
+import { Interface } from '@ethersproject/abi'  // r3: use ContractInterface
 
-import GnosisSafeProxyFactory from './GnosisSafeProxyFactory.json' // r1: remove dep
+import GnosisSafe from './GnosisSafe.json'
+import GnosisSafeProxyFactory from './GnosisSafeProxyFactory.json'
 
 export const createGnosisSafeProxyFactoryContract = (proxyFactoryAddress: string, signer: Signer) => new Contract(
   proxyFactoryAddress,
   GnosisSafeProxyFactory.abi,
   signer
 )
+
+export const createGnosisSageInterface = () => new Interface(GnosisSafe.abi)
 
 export const validateIsDeployedFactory =
   (signerOrProvider: providers.Provider) =>

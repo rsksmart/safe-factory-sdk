@@ -1,9 +1,7 @@
-import { Contract, Signer, Event, ethers } from 'ethers'
-import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe.json' // r2: remove dep
+import { Signer, Event, ethers } from 'ethers'
 import EthersSafe, { Safe } from '@gnosis.pm/safe-core-sdk'
 import { EMPTY_DATA, ZERO_ADDRESS } from './utils/constants'
-import { validateIsDeployedFactory, createGnosisSafeProxyFactoryContract } from './utils/contracts'
-import { Interface } from '@ethersproject/abi'  // r3: use ContractInterface
+import { validateIsDeployedFactory, createGnosisSafeProxyFactoryContract, createGnosisSageInterface } from './utils/contracts'
 
 export interface DeploymentOptions {
   nonce?: number
@@ -73,7 +71,7 @@ class EthersSafeFactory {
       paymentReceiver = ZERO_ADDRESS
     } = safeAccountConfiguration
 
-    const gnosisSafeInterface = new Interface(GnosisSafe.abi)
+    const gnosisSafeInterface = createGnosisSageInterface()
     const setupFunctionData = gnosisSafeInterface.encodeFunctionData('setup', [
       owners,
       threshold,
@@ -85,8 +83,8 @@ class EthersSafeFactory {
       paymentReceiver
     ])
 
-    const gnosisSafe = await this.deployProxy(deploymentOptions, setupFunctionData)
-    return await EthersSafe.create(ethers, gnosisSafe.address, this.#signer)
+    const gnosisSafeAddress = await this.deployProxy(deploymentOptions, setupFunctionData)
+    return await EthersSafe.create(ethers, gnosisSafeAddress, this.#signer)
   }
 
   private async createDeployProxyTransaction(
@@ -114,7 +112,7 @@ class EthersSafeFactory {
     }
   }
 
-  private async deployProxy(deploymentOptions: DeploymentOptions = {}, setupFnData: string) {
+  private async deployProxy(deploymentOptions: DeploymentOptions = {}, setupFnData: string): Promise<string> {
     const receipt = await this.createDeployProxyTransaction(deploymentOptions, setupFnData).then(
       (tx) => tx.wait()
     )
@@ -125,7 +123,7 @@ class EthersSafeFactory {
       )
     }
     const proxyAddress = proxyCreationEvent.args[0]
-    return new Contract(proxyAddress, GnosisSafe.abi, this.#signer)
+    return proxyAddress
   }
 }
 
