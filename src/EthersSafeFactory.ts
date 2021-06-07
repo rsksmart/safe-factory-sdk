@@ -1,7 +1,7 @@
 import { Signer, Event, ethers } from 'ethers'
 import EthersSafe, { Safe } from '@gnosis.pm/safe-core-sdk'
-import { EMPTY_DATA, ZERO_ADDRESS } from './utils/constants'
-import { validateIsDeployedFactory, createGnosisSafeProxyFactoryContract, createGnosisSageInterface } from './utils/contracts'
+import { EMPTY_DATA, ZERO_ADDRESS } from './constants'
+import { validateIsDeployedFactory, createGnosisSafeProxyFactoryContract, createGnosisSageInterface } from './contracts'
 
 export interface DeploymentOptions {
   nonce?: number

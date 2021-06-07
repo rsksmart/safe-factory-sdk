@@ -1,8 +1,8 @@
 import { providers, Signer, Contract, utils } from 'ethers'
 import { EMPTY_DATA } from './constants'
 
-import GnosisSafe from './GnosisSafe.json'
-import GnosisSafeProxyFactory from './GnosisSafeProxyFactory.json'
+import GnosisSafe from './abis/GnosisSafe.json'
+import GnosisSafeProxyFactory from './abis/GnosisSafeProxyFactory.json'
 
 export const createGnosisSafeProxyFactoryContract = (proxyFactoryAddress: string, signer: Signer) => new Contract(
   proxyFactoryAddress,
