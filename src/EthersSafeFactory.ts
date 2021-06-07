@@ -1,9 +1,8 @@
 import { Contract, Signer, Event, ethers } from 'ethers'
-import GnosisSafeProxyFactory from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafeProxyFactory.json' // r1: remove dep
 import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe.json' // r2: remove dep
 import EthersSafe, { Safe } from '@gnosis.pm/safe-core-sdk'
 import { EMPTY_DATA, ZERO_ADDRESS } from './utils/constants'
-import { validateIsDeployedFactory } from './utils/contracts'
+import { validateIsDeployedFactory, createGnosisSafeProxyFactoryContract } from './utils/contracts'
 import { Interface } from '@ethersproject/abi'  // r3: use ContractInterface
 
 export interface DeploymentOptions {
@@ -94,9 +93,8 @@ class EthersSafeFactory {
     deploymentOptions: DeploymentOptions = {},
     data: string
   ) {
-    const proxyFactory = new Contract(
+    const proxyFactory = createGnosisSafeProxyFactoryContract(
       this.#proxyFactoryAddress,
-      GnosisSafeProxyFactory.abi,
       this.#signer
     )
 
