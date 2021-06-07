@@ -1,7 +1,7 @@
 import { Signer, Event, ethers } from 'ethers'
 import EthersSafe, { Safe } from '@gnosis.pm/safe-core-sdk'
-import { EMPTY_DATA, ZERO_ADDRESS } from './constants'
-import { validateIsDeployedFactory, createGnosisSafeProxyFactoryContract, createGnosisSageInterface } from './contracts'
+import { SafeAccountConfiguration } from './types'
+import { validateIsDeployedFactory, createGnosisSafeProxyFactoryContract, createGnosisSafeSetupCallData } from './contracts'
 
 const validateSafeCreationParams = (owners: string[], threshold: number) => {
   if (owners.length <= 0)
@@ -16,17 +16,6 @@ const validateSafeCreationParams = (owners: string[], threshold: number) => {
 export interface DeploymentOptions {
   nonce?: number
   callbackAddress?: string
-}
-
-interface SafeAccountConfiguration {
-  owners: string[]
-  threshold: number
-  to?: string
-  data?: string
-  fallbackHandler?: string
-  paymentToken?: string
-  payment?: number
-  paymentReceiver?: string
 }
 
 class EthersSafeFactory {
@@ -64,34 +53,11 @@ class EthersSafeFactory {
      * 4) deploy proxy
      * 5) recover address
      */
-
-    const {
-      owners,
-      threshold,
-      to = ZERO_ADDRESS,
-      data = EMPTY_DATA,
-      fallbackHandler = ZERO_ADDRESS,
-      paymentToken = ZERO_ADDRESS,
-      payment = 0,
-      paymentReceiver = ZERO_ADDRESS
-    } = safeAccountConfiguration
-
-    validateSafeCreationParams(owners, threshold)
+    validateSafeCreationParams(safeAccountConfiguration.owners, safeAccountConfiguration.threshold)
     await this.validateContractsAreDeployed()
+    const setupCallData = createGnosisSafeSetupCallData(safeAccountConfiguration)
 
-    const gnosisSafeInterface = createGnosisSageInterface()
-    const setupFunctionData = gnosisSafeInterface.encodeFunctionData('setup', [
-      owners,
-      threshold,
-      to,
-      data,
-      fallbackHandler,
-      paymentToken,
-      payment,
-      paymentReceiver
-    ])
-
-    const gnosisSafeAddress = await this.deployProxy(deploymentOptions, setupFunctionData)
+    const gnosisSafeAddress = await this.deployProxy(deploymentOptions, setupCallData)
     return await EthersSafe.create(ethers, gnosisSafeAddress, this.#signer)
   }
 
