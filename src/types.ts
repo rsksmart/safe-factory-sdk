@@ -8,3 +8,8 @@ export interface SafeAccountConfiguration {
   payment?: number
   paymentReceiver?: string
 }
+
+export interface DeploymentOptions {
+  nonce?: number
+  callbackAddress?: string
+}
