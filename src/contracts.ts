@@ -5,6 +5,15 @@ import { SafeAccountConfiguration, DeploymentOptions } from './types'
 import GnosisSafe from './abis/GnosisSafe.json'
 import GnosisSafeProxyFactory from './abis/GnosisSafeProxyFactory.json'
 
+export const validateCreationParams = (owners: string[], threshold: number) => {
+  if (owners.length <= 0)
+    throw new Error('Invalid owners: it must have at least one')
+  if (threshold <= 0)
+    throw new Error('Invalid threshold: it must be greater than or equal to 0')
+  if (threshold > owners.length)
+    throw new Error('Invalid threshold: it must be lower than or equal to owners length')
+}
+
 export const createGnosisSafeProxyFactoryContract = (proxyFactoryAddress: string, signer: Signer) => new Contract(
   proxyFactoryAddress,
   GnosisSafeProxyFactory.abi,
@@ -20,7 +29,7 @@ export const validateIsDeployedFactory =
       }
     })
 
-export const createGnosisSafeSetupCallData = ({
+export const createSetupCallData = ({
   owners,
   threshold,
   to = ZERO_ADDRESS,
@@ -40,7 +49,7 @@ export const createGnosisSafeSetupCallData = ({
   paymentReceiver
 ])
 
-export const createDeployProxyTransactionFactory = (proxyFactory: Contract, safeSingletonAddress: string) => (
+export const deployProxyFactory = (proxyFactory: Contract, safeSingletonAddress: string) => (
   data: string,
   { nonce, callbackAddress }: DeploymentOptions = {},
 ): Promise<ContractTransaction> => {
