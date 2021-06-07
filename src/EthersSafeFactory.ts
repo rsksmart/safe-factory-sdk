@@ -1,10 +1,14 @@
-import { Signer, Event, ethers, Contract, ContractTransaction } from 'ethers'
+import { Signer, ethers, ContractTransaction } from 'ethers'
 import EthersSafe, { Safe } from '@gnosis.pm/safe-core-sdk'
 import { SafeAccountConfiguration, DeploymentOptions } from './types'
 import {
   validateCreationParams,
   validateIsDeployedFactory,
-  createGnosisSafeProxyFactoryContract, createSetupCallData, recoverDeployedProxy, deployProxyFactory } from './contracts'
+  createGnosisSafeProxyFactoryContract,
+  createSetupCallData,
+  recoverDeployedProxy,
+  deployProxyFactory
+} from './contracts'
 
 class EthersSafeFactory {
   public signer: Signer
@@ -12,7 +16,10 @@ class EthersSafeFactory {
   public proxyFactoryAddress: string
 
   private validateContractsAreDeployed: () => Promise<void>
-  private deployProxy: (data: string, deploymentOptions?: DeploymentOptions) => Promise<ContractTransaction>
+  private deployProxy: (
+    data: string,
+    deploymentOptions?: DeploymentOptions
+  ) => Promise<ContractTransaction>
 
   constructor(signer: Signer, proxyFactoryAddress: string, safeSingletonAddress: string) {
     this.signer = signer
@@ -23,7 +30,6 @@ class EthersSafeFactory {
       throw new Error('Signer must be connected to a provider')
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const validateIsDeployed = validateIsDeployedFactory(this.signer.provider)
     this.validateContractsAreDeployed = async () => {
       await validateIsDeployed(proxyFactoryAddress, 'ProxyFactory')
