@@ -1,10 +1,10 @@
 import { Contract, Signer, Event, ethers } from 'ethers'
-import GnosisSafeProxyFactory from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafeProxyFactory.json'
-import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe.json'
+import GnosisSafeProxyFactory from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafeProxyFactory.json' // r1: remove dep
+import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe.json' // r2: remove dep
 import EthersSafe, { Safe } from '@gnosis.pm/safe-core-sdk'
 import { EMPTY_DATA, ZERO_ADDRESS } from './utils/constants'
 import { validateIsDeployedFactory } from './utils/contracts'
-import { Interface } from '@ethersproject/abi'
+import { Interface } from '@ethersproject/abi'  // r3: use ContractInterface
 
 export interface DeploymentOptions {
   nonce?: number
@@ -45,6 +45,14 @@ class EthersSafeFactory {
     safeAccountConfiguration: SafeAccountConfiguration,
     deploymentOptions?: DeploymentOptions
   ): Promise<Safe> {
+    /**
+     * r4: extract methods
+     * 1) validate params
+     * 2) validate instance
+     * 3) create proxy transaction
+     * 4) deploy proxy
+     * 5) recover address
+     */
     await this.validateIsDeployed(this.#proxyFactoryAddress, 'ProxyFactory')
     await this.validateIsDeployed(this.#safeSingletonAddress, 'SafeSingleton')
 
