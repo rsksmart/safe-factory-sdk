@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "test": "npx hardhat test",
-    "test:coverage": "nyc hardhat test",
+    "test:coverage": "nyc --reporter=lcov hardhat test",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier \"{src,tests,hardhat}/**/*.ts\" --write",
     "build": "rimraf lib && npx webpack",
