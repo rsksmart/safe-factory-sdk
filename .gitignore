@@ -8,3 +8,4 @@ deployments
 
 # nyc
 .nyc_output
+coverage
