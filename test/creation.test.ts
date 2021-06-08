@@ -56,7 +56,7 @@ describe('Safe creation', () => {
         .expect(
           ethersSafeFactory.createSafe({
             owners,
-            threshold: -1
+            threshold: 1
           })
         )
         .rejectedWith('ProxyFactory contract is not deployed in the current network')
@@ -72,7 +72,7 @@ describe('Safe creation', () => {
         .expect(
           ethersSafeFactory.createSafe({
             owners,
-            threshold: -1
+            threshold: 1
           })
         )
         .rejectedWith('SafeSingleton contract is not deployed in the current network')
