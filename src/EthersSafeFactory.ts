@@ -11,9 +11,7 @@ import {
 } from './contracts'
 
 class EthersSafeFactory {
-  public signer: Signer
-  public safeSingletonAddress: string
-  public proxyFactoryAddress: string
+  private signer: Signer
 
   private validateContractsAreDeployed: () => Promise<void>
   private deployProxy: (
@@ -23,14 +21,12 @@ class EthersSafeFactory {
 
   constructor(signer: Signer, proxyFactoryAddress: string, safeSingletonAddress: string) {
     this.signer = signer
-    this.proxyFactoryAddress = proxyFactoryAddress
-    this.safeSingletonAddress = safeSingletonAddress
 
-    if (!this.signer.provider) {
+    if (!signer.provider) {
       throw new Error('Signer must be connected to a provider')
     }
 
-    const validateIsDeployed = validateIsDeployedFactory(this.signer.provider)
+    const validateIsDeployed = validateIsDeployedFactory(signer.provider)
     this.validateContractsAreDeployed = async () => {
       await validateIsDeployed(proxyFactoryAddress, 'ProxyFactory')
       await validateIsDeployed(safeSingletonAddress, 'SafeSingleton')
