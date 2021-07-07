@@ -9,6 +9,7 @@ import {
   recoverDeployedProxy,
   deployProxyFactory
 } from './contracts'
+import { MAINNET_SAFE_DEPLOYMENT, TESTNET_SAFE_DEPLOYMENT } from './constants'
 
 class EthersSafeFactory {
   private signer: Signer
@@ -48,6 +49,20 @@ class EthersSafeFactory {
     const gnosisSafeAddress = await recoverDeployedProxy(receipt)
     return await EthersSafe.create(ethers, gnosisSafeAddress, this.signer)
   }
+
+  public static createSafeFactoryOnRskTestnet = (signer: Signer): EthersSafeFactory =>
+    new EthersSafeFactory(
+      signer,
+      TESTNET_SAFE_DEPLOYMENT.proxyFactoryAddress,
+      TESTNET_SAFE_DEPLOYMENT.safeSingletonAddress
+    )
+
+  public static createSafeFactoryOnRskMainnet = (signer: Signer): EthersSafeFactory =>
+    new EthersSafeFactory(
+      signer,
+      MAINNET_SAFE_DEPLOYMENT.proxyFactoryAddress,
+      MAINNET_SAFE_DEPLOYMENT.safeSingletonAddress
+    )
 }
 
 export default EthersSafeFactory

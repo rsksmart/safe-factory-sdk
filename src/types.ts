@@ -13,3 +13,8 @@ export interface DeploymentOptions {
   nonce?: number
   callbackAddress?: string
 }
+
+export interface SafeDeployment {
+  proxyFactoryAddress: string
+  safeSingletonAddress: string
+}
