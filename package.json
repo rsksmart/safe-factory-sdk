@@ -1,6 +1,6 @@
 {
   "name": "@rsksmart/safe-factory-sdk",
-  "version": "0.0.1-beta.1",
+  "version": "1.0.0",
   "description": "RIF Safe Factory SDK",
   "main": "lib/index.js",
   "files": [
