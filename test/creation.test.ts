@@ -35,10 +35,10 @@ describe('Safe creation', () => {
       ;({ safeSingletonAddress, proxyFactoryAddress } = await setupTests())
     })
 
-    it('should fail if the signer is not connected to a provider', async () => {
+    it('should fail if the signer is not connected to a provider', () => {
       // Used to mock a signer without provider
       const mockedSigner = {}
-      await chai
+      chai
         .expect(
           () =>
             new EthersSafeFactory(mockedSigner as Signer, proxyFactoryAddress, safeSingletonAddress)
@@ -168,6 +168,26 @@ describe('Safe creation', () => {
         }
       )
       await verifyOwnersAndThreshold(safeSdk, owners, 1)
+    })
+  })
+
+  describe('EthersSafeFactory.createSafeFactoryOnRskTestnet', () => {
+    it('should fail if the signer is not connected to a provider', () => {
+      // Used to mock a signer without provider
+      const mockedSigner = {}
+      chai
+        .expect(() => EthersSafeFactory.createSafeFactoryOnRskTestnet(mockedSigner as Signer))
+        .throws('Signer must be connected to a provider')
+    })
+  })
+
+  describe('EthersSafeFactory.createSafeFactoryOnRskMainnet', () => {
+    it('should fail if the signer is not connected to a provider', () => {
+      // Used to mock a signer without provider
+      const mockedSigner = {}
+      chai
+        .expect(() => EthersSafeFactory.createSafeFactoryOnRskMainnet(mockedSigner as Signer))
+        .throws('Signer must be connected to a provider')
     })
   })
 })
